@@ -1,4 +1,4 @@
-from os import path, getcwd, chdir, mkdir, system
+from os import path, getcwd, chdir, mkdir, system, chroot
 from sys import exit, argv
 import json
 
@@ -65,7 +65,12 @@ def projectit(mode):
         print("Opening editor")
         system(f'{defedi} .') 
     except Exception as e:
-        print(e)
+        chdir(defdir)
+        with open("./projectit.log", "w+") as f:
+            f.write(f'{e}\n')
+            f.close()
+            print("\nError occured")
+            exit(1)
 
 
 if len(argv)!=0:
