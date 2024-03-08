@@ -1,0 +1,3 @@
+#!/bin/sh
+
+python3 '/home/pratyush/Documents/Programming/Python/ProjectIt/projectit.py' $1 $2 

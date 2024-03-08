@@ -5,6 +5,7 @@ import json
 if path.exists(getcwd() + "/projectit.json"):
     with open("./projectit.json") as f:
         config=json.load(f)
+        version=config["version"]
         defdir=config['defdir']
         defgit=config['defgit']
         defedi=config['defedi']
@@ -39,6 +40,7 @@ git_init=[
 ]
 
 def projectit(mode):
+    print(f"ProjectIt ({version})\n")
     try:
         if mode=="def":
             chdir(defdir)
@@ -75,8 +77,34 @@ def projectit(mode):
 
 if len(argv)!=0:
     for i in argv:
-        if "def" in i:
+        if "def" or "-d" or "--default" in i:
             projectit("def")
+        elif "reconfig" in i:
+            print("ProjectIt: reconfig files")
+            defdir=input("Please enter the default dir for your projects: ")
+            defgit=input("Would you like to create a git repo in a new project by default(Yes): ")
+            defedi=input("Please state the command for your favorite editor(code): ")
+            if defgit=="":
+                defgit="yes"
+            else:
+                defgit="no"
+            if defedi=="":
+                defedi="code"
+            else:
+                pass
+            configTemplate={"version":"0.0.1 ALPHA","defdir":defdir,"defgit":defgit,"defedi":defedi}
+            with open(getcwd() + "/projectit.json", "w+") as f:
+                json.dump(configTemplate,f) 
+                f.close()
+            print("Please restart the app to load configration files")
+            exit(0)
+
+        elif "-h" or "--help" in i:
+            print(f"""ProjectIt {version}
+-h or --help | shows this message
+-d or --default | runs with default configrations
+reconfig | reconfigs files 
+""")
         else:
             projectit("")
 else:
